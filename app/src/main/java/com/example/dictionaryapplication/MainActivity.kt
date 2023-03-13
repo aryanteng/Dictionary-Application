@@ -1,12 +1,15 @@
 package com.example.dictionaryapplication
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import com.example.dictionaryapplication.databinding.ActivityMainBinding
 import java.io.BufferedInputStream
 import java.io.BufferedReader
@@ -40,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    class DictionaryAsyncTask : AsyncTask<String, Void, String>() {
+    class DictionaryAsyncTask(private val activity: Activity) : AsyncTask<String, Void, String>() {
         override fun doInBackground(vararg urls: String?): String {
             val url = URL(urls[0])
             val urlConnection = url.openConnection() as HttpURLConnection
@@ -60,15 +63,25 @@ class MainActivity : AppCompatActivity() {
         }
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-
-            // Process the response string as needed
             Log.d("Dictionary API Response", (result ?: "") as String)
-
+            val resultFragment = ResultFragment()
+            val bundle = Bundle().apply {
+                putString("result", result)
+            }
+//            resultFragment.arguments = bundle
+//            val transaction = fragmentManager.beginTransaction()
+//            transaction.replace(R.id.frame_layout, resultFragment)
+//            transaction.addToBackStack(null)
+//            transaction.commit()
+            val intent = Intent(activity, ResultActivity::class.java)
+            intent.putExtra("result", result)
+            activity.startActivity(intent)
         }
     }
     private fun sendDictionaryRequest(word: String) {
         val url = "https://api.dictionaryapi.dev/api/v2/entries/en_US/$word"
-        val asyncTask = DictionaryAsyncTask()
+        val fragmentManager = supportFragmentManager
+        val asyncTask = DictionaryAsyncTask(this)
         asyncTask.execute(url)
     }
 
