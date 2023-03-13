@@ -58,6 +58,7 @@ class ResultFragment : Fragment() {
         val jsonObject = jsonArray.getJSONObject(0)
         val word = jsonObject.getString("word")
         val phonetics = jsonObject.getJSONArray("phonetics")
+        val meanings = jsonObject.getJSONArray("meanings")
 
         for(i in 0 until phonetics.length()){
             val phoneticObject = phonetics.getJSONObject(i)
@@ -70,9 +71,11 @@ class ResultFragment : Fragment() {
         binding.tvWord.text = word
 
         binding.btnAudio.setOnClickListener {
-            val audioURL = audio
-            val asyncTask = DownloadAudioTask(requireContext(), audioURL)
-            asyncTask.execute()
+            if(audio.isNotEmpty()){
+                val audioURL = audio
+                val asyncTask = DownloadAudioTask(requireContext(), audioURL)
+                asyncTask.execute()
+            }
         }
     }
 
