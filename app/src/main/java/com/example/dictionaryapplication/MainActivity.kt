@@ -64,15 +64,6 @@ class MainActivity : AppCompatActivity() {
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
             Log.d("Dictionary API Response", (result ?: "") as String)
-            val resultFragment = ResultFragment()
-            val bundle = Bundle().apply {
-                putString("result", result)
-            }
-//            resultFragment.arguments = bundle
-//            val transaction = fragmentManager.beginTransaction()
-//            transaction.replace(R.id.frame_layout, resultFragment)
-//            transaction.addToBackStack(null)
-//            transaction.commit()
             val intent = Intent(activity, ResultActivity::class.java)
             intent.putExtra("result", result)
             activity.startActivity(intent)
@@ -80,7 +71,6 @@ class MainActivity : AppCompatActivity() {
     }
     private fun sendDictionaryRequest(word: String) {
         val url = "https://api.dictionaryapi.dev/api/v2/entries/en_US/$word"
-        val fragmentManager = supportFragmentManager
         val asyncTask = DictionaryAsyncTask(this)
         asyncTask.execute(url)
     }

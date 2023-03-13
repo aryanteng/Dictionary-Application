@@ -1,11 +1,19 @@
 package com.example.dictionaryapplication
 
+import android.content.Context
+import android.media.MediaPlayer
+import android.os.AsyncTask
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.dictionaryapplication.databinding.FragmentResultBinding
+import java.io.InputStream
+import java.io.OutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +45,57 @@ class ResultFragment : Fragment() {
     ): View? {
         binding = FragmentResultBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnAudio.setOnClickListener {
+            val url = "https://api.dictionaryapi.dev/media/pronunciations/en/hello-au.mp3"
+            val asyncTask = DownloadAudioTask(requireContext(), url)
+            asyncTask.execute()
+        }
+    }
+
+    class DownloadAudioTask(private val context: Context, private val audio: String) : AsyncTask<Void, Void, Boolean>() {
+        private lateinit var mediaPlayer: MediaPlayer
+        private val audioFileName = "downloadedAudio.mp3"
+        override fun doInBackground(vararg params: Void?): Boolean {
+            var input: InputStream? = null
+            var output: OutputStream? = null
+            try {
+                val url = URL(audio)
+                val connection = url.openConnection() as HttpURLConnection
+                connection.connect()
+                if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                    return false
+                }
+                input = connection.inputStream
+                output = context.openFileOutput(audioFileName, Context.MODE_PRIVATE)
+                val buffer = ByteArray(4096)
+                var length: Int
+                while (input.read(buffer).also { length = it } != -1) {
+                    output.write(buffer, 0, length)
+                }
+                mediaPlayer = MediaPlayer()
+                mediaPlayer?.setDataSource(context.getFileStreamPath(audioFileName).absolutePath)
+                mediaPlayer?.prepare()
+                return true
+            } catch (e: Exception) {
+                return false
+            } finally {
+                input?.close()
+                output?.close()
+            }
+        }
+        override fun onPostExecute(result: Boolean) {
+            if (result) {
+                Toast.makeText(context, "Downloaded successfully", Toast.LENGTH_SHORT).show()
+                mediaPlayer?.start()
+            } else {
+                Toast.makeText(context, "Download failed", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     companion object {
