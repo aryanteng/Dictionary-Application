@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.dictionaryapplication.databinding.FragmentResultBinding
+import org.json.JSONArray
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.HttpURLConnection
@@ -30,12 +31,15 @@ class ResultFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentResultBinding
+    private lateinit var result: String
+    private lateinit var audio: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+            result = it.getString("result").toString()
         }
     }
 
@@ -50,9 +54,24 @@ class ResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val jsonArray = JSONArray(result)
+        val jsonObject = jsonArray.getJSONObject(0)
+        val word = jsonObject.getString("word")
+        val phonetics = jsonObject.getJSONArray("phonetics")
+
+        for(i in 0 until phonetics.length()){
+            val phoneticObject = phonetics.getJSONObject(i)
+            val audioUrl = phoneticObject.getString("audio")
+            if(audioUrl.isNotEmpty()){
+                audio = audioUrl
+            }
+        }
+
+        binding.tvWord.text = word
+
         binding.btnAudio.setOnClickListener {
-            val url = "https://api.dictionaryapi.dev/media/pronunciations/en/hello-au.mp3"
-            val asyncTask = DownloadAudioTask(requireContext(), url)
+            val audioURL = audio
+            val asyncTask = DownloadAudioTask(requireContext(), audioURL)
             asyncTask.execute()
         }
     }

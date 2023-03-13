@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    class DictionaryAsyncTask(private val activity: Activity) : AsyncTask<String, Void, String>() {
+    class GetDictionaryAPI(private val activity: Activity) : AsyncTask<String, Void, String>() {
         override fun doInBackground(vararg urls: String?): String {
             val url = URL(urls[0])
             val urlConnection = url.openConnection() as HttpURLConnection
@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
                 val inputStream = BufferedInputStream(urlConnection.inputStream)
                 val bufferedReader = BufferedReader(InputStreamReader(inputStream))
                 val stringBuilder = StringBuilder()
-
                 var line: String?
                 while (bufferedReader.readLine().also { line = it } != null) {
                     stringBuilder.append(line).append("\n")
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         }
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            Log.d("Dictionary API Response", (result ?: "") as String)
+            Log.d("result", (result ?: "") as String)
             val intent = Intent(activity, ResultActivity::class.java)
             intent.putExtra("result", result)
             activity.startActivity(intent)
@@ -71,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun sendDictionaryRequest(word: String) {
         val url = "https://api.dictionaryapi.dev/api/v2/entries/en_US/$word"
-        val asyncTask = DictionaryAsyncTask(this)
+        val asyncTask = GetDictionaryAPI(this)
         asyncTask.execute(url)
     }
 
