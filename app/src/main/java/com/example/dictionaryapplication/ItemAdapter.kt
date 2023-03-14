@@ -12,25 +12,28 @@ class ItemAdapter (private val items: MutableList<Meaning>):
 
     private lateinit var tvPos: TextView
 
-//    interface OnBtnClickListener {
-//        fun onBtnClick(item: CartItem)
-//    }
-//    private var listener: OnBtnClickListener? = null
-//
-//    fun setOnBtnClickListener(listener: OnBtnClickListener) {
-//        this.listener = listener
-//    }
+    interface OnBtnClickListener {
+        fun onBtnClick(item: Meaning)
+    }
+    private var listener: OnBtnClickListener? = null
 
+    fun setOnBtnClickListener(listener: OnBtnClickListener) {
+        this.listener = listener
+    }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         fun bind(item: Meaning) {
             tvPos.text = item.partOfSpeech
+            tvPos.setOnClickListener {
+                listener?.onBtnClick(item)
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pos, parent, false)
         tvPos = view.findViewById(R.id.tv_pos)
+
         return ViewHolder(view)
     }
 

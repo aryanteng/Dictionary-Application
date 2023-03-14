@@ -2,7 +2,6 @@ package com.example.dictionaryapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.dictionaryapplication.databinding.ActivityMainBinding
 import com.example.dictionaryapplication.databinding.ActivityResultBinding
 
 class ResultActivity : AppCompatActivity() {
@@ -22,7 +21,7 @@ class ResultActivity : AppCompatActivity() {
         resultFragment.arguments = bundle
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frame_layout, resultFragment)
+        fragmentTransaction.replace(R.id.fl_result, resultFragment)
         fragmentTransaction.commit()
 
     }

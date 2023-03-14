@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dictionaryapplication.databinding.FragmentResultBinding
+import com.google.gson.Gson
 import org.json.JSONArray
 import java.io.InputStream
 import java.io.OutputStream
@@ -113,6 +114,21 @@ class ResultFragment : Fragment() {
                 asyncTask.execute()
             }
         }
+
+        itemAdapter.setOnBtnClickListener(object: ItemAdapter.OnBtnClickListener{
+            override fun onBtnClick(item: Meaning) {
+                val definitionFragment = DefinitionFragment()
+                val bundle = Bundle().apply {
+                    val gson = Gson()
+                    val meaningString = gson.toJson(item)
+                    putString("item", meaningString)
+                }
+                definitionFragment.arguments = bundle
+                val fragmentManager = childFragmentManager
+                definitionFragment.show(fragmentManager, "dialog")
+            }
+        })
+
     }
 
     class DownloadAudioTask(private val context: Context, private val audio: String) : AsyncTask<Void, Void, Boolean>() {
