@@ -66,6 +66,13 @@ class DefinitionFragment : DialogFragment() {
         }
 
         for(i in 0 until meaningObj.definitions.size){
+            if(meaningObj.definitions[i].example.isNotEmpty()){
+                binding.tvExample.text = "Example: " + meaningObj.definitions[i].example
+                break
+            }
+        }
+
+        for(i in 0 until meaningObj.definitions.size){
             if(meaningObj.definitions[i].synonyms.isNotEmpty()){
                 var synonyms = "Synonyms: "
                 for(j in 0 until meaningObj.definitions[i].synonyms.size){
