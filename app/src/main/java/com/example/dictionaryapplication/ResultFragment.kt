@@ -60,14 +60,17 @@ class ResultFragment : Fragment() {
         val jsonArray = JSONArray(result)
         val jsonObject = jsonArray.getJSONObject(0)
         val word = jsonObject.getString("word")
-        val phonetics = jsonObject.getJSONArray("phonetics")
         val meanings = jsonObject.getJSONArray("meanings")
 
-        for(i in 0 until phonetics.length()){
-            val phoneticObject = phonetics.getJSONObject(i)
-            val audioUrl = phoneticObject.getString("audio")
-            if(audioUrl.isNotEmpty()){
-                audio = audioUrl
+        for(i in 0 until jsonArray.length()){
+            val jsonObject = jsonArray.getJSONObject(i)
+            val phonetics = jsonObject.getJSONArray("phonetics")
+            for(j in 0 until phonetics.length()){
+                val phoneticObject = phonetics.getJSONObject(j)
+                val audioUrl = phoneticObject.getString("audio")
+                if(audioUrl.isNotEmpty()){
+                    audio = audioUrl
+                }
             }
         }
 

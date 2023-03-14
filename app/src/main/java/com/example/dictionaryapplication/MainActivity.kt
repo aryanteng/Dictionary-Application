@@ -48,6 +48,10 @@ class MainActivity : AppCompatActivity() {
             val url = URL(urls[0])
             val urlConnection = url.openConnection() as HttpURLConnection
             try {
+                val responseCode = urlConnection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                    return "Not Found"
+                }
                 val inputStream = BufferedInputStream(urlConnection.inputStream)
                 val bufferedReader = BufferedReader(InputStreamReader(inputStream))
                 val stringBuilder = StringBuilder()
@@ -62,10 +66,15 @@ class MainActivity : AppCompatActivity() {
         }
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            Log.d("result", (result ?: "") as String)
-            val intent = Intent(activity, ResultActivity::class.java)
-            intent.putExtra("result", result)
-            activity.startActivity(intent)
+            if(result == "Not Found"){
+                Toast.makeText(activity, "Word Not Found", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Log.d("result", (result ?: "") as String)
+                val intent = Intent(activity, ResultActivity::class.java)
+                intent.putExtra("result", result)
+                activity.startActivity(intent)
+            }
         }
     }
     private fun sendDictionaryRequest(word: String) {
