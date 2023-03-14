@@ -54,16 +54,13 @@ class DefinitionFragment : DialogFragment() {
         val gson = Gson()
         val meaningObj = gson.fromJson(item, Meaning::class.java)
 
-        for(i in 0 until meaningObj.definitions.size){
-            if(meaningObj.definitions[i].definition.isNotEmpty()){
-                binding.tvDefinition.text = "Definition: " + meaningObj.definitions[i].definition
-                break
-            }
+        if(meaningObj.partOfSpeech.isNotEmpty()){
+            binding.tvPos.text = "Part of Speech: " + meaningObj.partOfSpeech
         }
 
         for(i in 0 until meaningObj.definitions.size){
-            if(meaningObj.partOfSpeech.isNotEmpty()){
-                binding.tvPos.text = "Part of Speech: " + meaningObj.partOfSpeech
+            if(meaningObj.definitions[i].definition.isNotEmpty()){
+                binding.tvDefinition.text = "Definition: " + meaningObj.definitions[i].definition
                 break
             }
         }
