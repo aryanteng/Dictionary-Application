@@ -14,7 +14,7 @@ import com.example.dictionaryapplication.databinding.FragmentItemBinding
  * TODO: Replace the implementation with code for your data type.
  */
 class MyItemRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>
+    private val items: MutableList<Meaning>
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,12 +29,12 @@ class MyItemRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+        val item = items[position]
+//        holder.idView.text = item.id
+        holder.contentView.text = item.partOfSpeech
     }
 
-    override fun getItemCount(): Int = values.size
+    override fun getItemCount(): Int = items.size
 
     inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val idView: TextView = binding.itemNumber

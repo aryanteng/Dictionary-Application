@@ -23,6 +23,5 @@ class ResultActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fl_result, resultFragment)
         fragmentTransaction.commit()
-
     }
 }
