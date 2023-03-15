@@ -21,7 +21,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [DefinitionFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class DefinitionFragment : DialogFragment() {
+class DefinitionFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -55,11 +55,13 @@ class DefinitionFragment : DialogFragment() {
         val meaningObj = gson.fromJson(item, Meaning::class.java)
 
         if(meaningObj.partOfSpeech.isNotEmpty()){
+            binding.tvPos.visibility = View.VISIBLE
             binding.tvPos.text = "Part of Speech: " + meaningObj.partOfSpeech
         }
 
         for(i in 0 until meaningObj.definitions.size){
             if(meaningObj.definitions[i].definition.isNotEmpty()){
+                binding.tvDefinition.visibility = View.VISIBLE
                 binding.tvDefinition.text = "Definition: " + meaningObj.definitions[i].definition
                 break
             }
@@ -67,6 +69,7 @@ class DefinitionFragment : DialogFragment() {
 
         for(i in 0 until meaningObj.definitions.size){
             if(meaningObj.definitions[i].example.isNotEmpty()){
+                binding.tvExample.visibility = View.VISIBLE
                 binding.tvExample.text = "Example: " + meaningObj.definitions[i].example
                 break
             }
@@ -82,6 +85,7 @@ class DefinitionFragment : DialogFragment() {
                         meaningObj.definitions[i].synonyms[j] + ", "
                     }
                 }
+                binding.tvSynonyms.visibility = View.VISIBLE
                 binding.tvSynonyms.text = synonyms
                 break
             }
@@ -97,6 +101,7 @@ class DefinitionFragment : DialogFragment() {
                         meaningObj.definitions[i].antonyms[j] + ", "
                     }
                 }
+                binding.tvAntonyms.visibility = View.VISIBLE
                 binding.tvAntonyms.text = antonyms
                 break
             }

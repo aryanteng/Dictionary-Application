@@ -1,6 +1,7 @@
 package com.example.dictionaryapplication
 
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.os.Bundle
@@ -120,15 +121,12 @@ class ResultFragment : Fragment() {
 
         itemAdapter.setOnBtnClickListener(object: ItemAdapter.OnBtnClickListener{
             override fun onBtnClick(item: Meaning) {
-                val definitionFragment = DefinitionFragment()
-                val bundle = Bundle().apply {
-                    val gson = Gson()
-                    val meaningString = gson.toJson(item)
-                    putString("item", meaningString)
-                }
-                definitionFragment.arguments = bundle
-                val fragmentManager = childFragmentManager
-                definitionFragment.show(fragmentManager, "dialog")
+
+                val intent = Intent(activity, DefinitionActivity::class.java)
+                val gson = Gson()
+                val meaningString = gson.toJson(item)
+                intent.putExtra("item", meaningString)
+                activity?.startActivity(intent)
             }
         })
 
@@ -167,10 +165,10 @@ class ResultFragment : Fragment() {
         }
         override fun onPostExecute(result: Boolean) {
             if (result) {
-                Toast.makeText(context, "Downloaded successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Download Successful", Toast.LENGTH_SHORT).show()
                 mediaPlayer?.start()
             } else {
-                Toast.makeText(context, "Download failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Download Failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
