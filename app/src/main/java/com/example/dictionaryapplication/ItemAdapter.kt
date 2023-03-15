@@ -12,12 +12,12 @@ class ItemAdapter (private val items: MutableList<Meaning>):
 
     private lateinit var tvPos: TextView
 
-    interface OnBtnClickListener {
-        fun onBtnClick(item: Meaning)
+    interface OnItemClickListener {
+        fun onItemClick(item: Meaning)
     }
-    private var listener: OnBtnClickListener? = null
+    private var listener: OnItemClickListener? = null
 
-    fun setOnBtnClickListener(listener: OnBtnClickListener) {
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
 
@@ -25,7 +25,7 @@ class ItemAdapter (private val items: MutableList<Meaning>):
         fun bind(item: Meaning) {
             tvPos.text = item.partOfSpeech
             tvPos.setOnClickListener {
-                listener?.onBtnClick(item)
+                listener?.onItemClick(item)
             }
         }
     }

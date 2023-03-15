@@ -119,8 +119,8 @@ class ResultFragment : Fragment() {
             }
         }
 
-        itemAdapter.setOnBtnClickListener(object: ItemAdapter.OnBtnClickListener{
-            override fun onBtnClick(item: Meaning) {
+        itemAdapter.setOnItemClickListener(object: ItemAdapter.OnItemClickListener{
+            override fun onItemClick(item: Meaning) {
                 val intent = Intent(activity, DefinitionActivity::class.java)
                 val gson = Gson()
                 val meaningString = gson.toJson(item)
