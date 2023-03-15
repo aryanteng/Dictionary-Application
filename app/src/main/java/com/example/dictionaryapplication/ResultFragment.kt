@@ -71,6 +71,7 @@ class ResultFragment : Fragment() {
                 val audioUrl = phoneticObject.getString("audio")
                 if(audioUrl.isNotEmpty()){
                     audio = audioUrl
+                    break
                 }
             }
         }
