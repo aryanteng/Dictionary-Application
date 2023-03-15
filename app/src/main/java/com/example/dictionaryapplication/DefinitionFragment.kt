@@ -75,9 +75,10 @@ class DefinitionFragment : Fragment() {
             }
         }
 
+        var synonyms = "Synonyms: "
         for(i in 0 until meaningObj.definitions.size){
             if(meaningObj.definitions[i].synonyms.isNotEmpty()){
-                var synonyms = "Synonyms: "
+                binding.tvSynonyms.visibility = View.VISIBLE
                 for(j in 0 until meaningObj.definitions[i].synonyms.size){
                     synonyms += if(j == meaningObj.definitions[i].synonyms.size - 1){
                         meaningObj.definitions[i].synonyms[j] + "."
@@ -85,15 +86,14 @@ class DefinitionFragment : Fragment() {
                         meaningObj.definitions[i].synonyms[j] + ", "
                     }
                 }
-                binding.tvSynonyms.visibility = View.VISIBLE
-                binding.tvSynonyms.text = synonyms
-                break
             }
         }
+        binding.tvSynonyms.text = synonyms
 
+        var antonyms = "Antonyms: "
         for(i in 0 until meaningObj.definitions.size){
             if(meaningObj.definitions[i].antonyms.isNotEmpty()){
-                var antonyms = "Antonyms: "
+                binding.tvAntonyms.visibility = View.VISIBLE
                 for(j in 0 until meaningObj.definitions[i].antonyms.size){
                     antonyms += if(j == meaningObj.definitions[i].antonyms.size - 1){
                         meaningObj.definitions[i].antonyms[j] + "."
@@ -101,11 +101,9 @@ class DefinitionFragment : Fragment() {
                         meaningObj.definitions[i].antonyms[j] + ", "
                     }
                 }
-                binding.tvAntonyms.visibility = View.VISIBLE
-                binding.tvAntonyms.text = antonyms
-                break
             }
         }
+        binding.tvAntonyms.text = antonyms
 
     }
 
