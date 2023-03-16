@@ -61,7 +61,6 @@ class ResultFragment : Fragment() {
         val jsonArray = JSONArray(result)
         val jsonObject = jsonArray.getJSONObject(0)
         val word = jsonObject.getString("word")
-        val meanings = jsonObject.getJSONArray("meanings")
 
         for(i in 0 until jsonArray.length()){
             val jsonObject = jsonArray.getJSONObject(i)
@@ -80,30 +79,34 @@ class ResultFragment : Fragment() {
 
         val meaningsList = mutableListOf<Meaning>()
 
-        for (i in 0 until meanings.length()) {
-            val meaningJsonObject = meanings.getJSONObject(i)
-            val partOfSpeech = meaningJsonObject.getString("partOfSpeech")
-            val definitions = meaningJsonObject.getJSONArray("definitions")
-            val definitionsList = mutableListOf<Definitions>()
-            for (j in 0 until definitions.length()){
-                val definition = definitions.getJSONObject(j).optString("definition", "")
-                val synonyms = definitions.getJSONObject(j).optJSONArray("synonyms")
-                val antonyms = definitions.getJSONObject(j).optJSONArray("antonyms")
-                val example = definitions.getJSONObject(j).optString("example", "")
-                val synonymsList = mutableListOf<String>()
-                val antonymsList = mutableListOf<String>()
-                for (k in 0 until synonyms.length()) {
-                    val synonym = synonyms.getString(k)
-                    synonymsList.add(synonym)
+        for(x in 0 until jsonArray.length()){
+            val jsonObject = jsonArray.getJSONObject(x)
+            val meanings = jsonObject.getJSONArray("meanings")
+            for (i in 0 until meanings.length()) {
+                val meaningJsonObject = meanings.getJSONObject(i)
+                val partOfSpeech = meaningJsonObject.getString("partOfSpeech")
+                val definitions = meaningJsonObject.getJSONArray("definitions")
+                val definitionsList = mutableListOf<Definitions>()
+                for (j in 0 until definitions.length()){
+                    val definition = definitions.getJSONObject(j).optString("definition", "")
+                    val synonyms = definitions.getJSONObject(j).optJSONArray("synonyms")
+                    val antonyms = definitions.getJSONObject(j).optJSONArray("antonyms")
+                    val example = definitions.getJSONObject(j).optString("example", "")
+                    val synonymsList = mutableListOf<String>()
+                    val antonymsList = mutableListOf<String>()
+                    for (k in 0 until synonyms.length()) {
+                        val synonym = synonyms.getString(k)
+                        synonymsList.add(synonym)
+                    }
+                    for (k in 0 until antonyms.length()) {
+                        val antonym = antonyms.getString(k)
+                        antonymsList.add(antonym)
+                    }
+                    val definitionItem = Definitions(definition = definition, synonyms = synonymsList, antonyms = antonymsList, example = example)
+                    definitionsList.add(definitionItem)
                 }
-                for (k in 0 until antonyms.length()) {
-                    val antonym = antonyms.getString(k)
-                    antonymsList.add(antonym)
-                }
-                val definitionItem = Definitions(definition = definition, synonyms = synonymsList, antonyms = antonymsList, example = example)
-                definitionsList.add(definitionItem)
+                meaningsList.add(Meaning(partOfSpeech, definitionsList))
             }
-            meaningsList.add(Meaning(partOfSpeech, definitionsList))
         }
 
         Log.i("MEANING LIST", meaningsList.toString())
