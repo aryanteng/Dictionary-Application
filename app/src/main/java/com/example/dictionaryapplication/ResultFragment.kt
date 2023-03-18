@@ -36,7 +36,7 @@ class ResultFragment : Fragment() {
     private var param2: String? = null
     private lateinit var binding: FragmentResultBinding
     private lateinit var result: String
-    private lateinit var audio: String
+    private var audio: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,6 +120,9 @@ class ResultFragment : Fragment() {
                 val audioURL = audio
                 val asyncTask = DownloadAudioTask(requireContext(), audioURL)
                 asyncTask.execute()
+            }
+            else{
+                Toast.makeText(context, "Audio Not Available", Toast.LENGTH_SHORT).show()
             }
         }
 
